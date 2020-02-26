@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ChessPieceClass
 {
-    public List<Vector2> moveDir;
+    public List<Vector2> moveDir = new List<Vector2>();
     public string pieceName;
 
     public ChessPieceClass(string name)
@@ -56,5 +56,5 @@ public class ChessPieceClass
         moveDir.Add(new Vector2(1, -2));
         moveDir.Add(new Vector2(-1, -2));
     }
-}
+
 }

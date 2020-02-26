@@ -2,17 +2,59 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChessPieceClass : MonoBehaviour
+public class ChessPieceClass
 {
-    // Start is called before the first frame update
-    void Start()
+    public List<Vector2> moveDir;
+    public string pieceName;
+
+    public ChessPieceClass(string name)
     {
-        
+        switch (name)
+        {
+            case "King":
+                BuildDiagonal();
+                BuildStraights();
+                break;
+            case "Queen":
+                BuildDiagonal();
+                BuildStraights();
+                break;
+            case "Bishop":
+                BuildDiagonal();
+                break;
+            case "Rook":
+                BuildStraights();
+                break;
+            case "Knight":
+                BuildKnight();
+                break;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    void BuildDiagonal()
     {
-        
+        moveDir.Add(new Vector2(1, 1));
+        moveDir.Add(new Vector2(-1, 1));
+        moveDir.Add(new Vector2(-1, -1));
+        moveDir.Add(new Vector2(1, -1));
     }
+    void BuildStraights()
+    {
+        moveDir.Add(new Vector2(0, 1));
+        moveDir.Add(new Vector2(0, -1));
+        moveDir.Add(new Vector2(1, 0));
+        moveDir.Add(new Vector2(-1, 0));
+    }
+    void BuildKnight()
+    {
+        moveDir.Add(new Vector2(2, 1));
+        moveDir.Add(new Vector2(2, -1));
+        moveDir.Add(new Vector2(1, 2));
+        moveDir.Add(new Vector2(-1, 2));
+        moveDir.Add(new Vector2(-2, 1));
+        moveDir.Add(new Vector2(-2, -1));
+        moveDir.Add(new Vector2(1, -2));
+        moveDir.Add(new Vector2(-1, -2));
+    }
+}
 }

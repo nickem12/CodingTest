@@ -36,6 +36,8 @@ public class GameSolver : MonoBehaviour
             pieces.Add(new ChessPieceClass("Rook"));
         }
         Debug.Log(pieces.Count);
+        CycleArray(board, 0);
+        Debug.Log(solutions.Count);
     }
 
     private void CycleArray(Tile[,] array, int piecesIndex)
@@ -49,8 +51,10 @@ public class GameSolver : MonoBehaviour
                 {
                     tempArray[i, j].placeble = false;
                     tempArray[i, j].pieceAttached = pieces[piecesIndex];
+                    
                     if(piecesIndex + 1 < pieces.Count)
                     {
+                        tempArray = PlacePieceOnBoard(tempArray, pieces[piecesIndex], new Vector2(i, j));
                         CycleArray(tempArray, piecesIndex++);
                     }
                     else
@@ -70,7 +74,7 @@ public class GameSolver : MonoBehaviour
         switch (piece.pieceName)
         {
             case "King":
-                canKill = KingKillCheck(piece.moveDir,tiles, position);
+                canKill = SetMovementAmountKillCheck(piece.moveDir,tiles, position);
                 break;
             case "Queen":
                 canKill = DirectionalKillCheck(piece.moveDir, tiles, position);
@@ -82,26 +86,119 @@ public class GameSolver : MonoBehaviour
                 canKill = DirectionalKillCheck(piece.moveDir, tiles, position);
                 break;
             case "Knight":
-                canKill = KnightKillCheck(piece.moveDir, tiles, position);
+                canKill = SetMovementAmountKillCheck(piece.moveDir, tiles, position);
                 break;
         }
         return canKill;
     }
 
-    private bool KingKillCheck(List<Vector2> directions, Tile[,] tiles, Vector2 position)
+    private bool SetMovementAmountKillCheck(List<Vector2> directions, Tile[,] tiles, Vector2 position)
     {
-        return true;
-    }
-
-    private bool KnightKillCheck(List<Vector2> directions, Tile[,] tiles, Vector2 position)
-    {
-        return true;
+        for(int i = 0; i < directions.Count; i++)
+        {
+            Vector2 temp = position + directions[i];
+            if (temp.x >= 0 && temp.x < tiles.GetLength(0) && temp.y >= 0 && temp.y < tiles.GetLength(1))
+            {
+                if(tiles[(int)temp.x,(int)temp.y].pieceAttached != null)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private bool DirectionalKillCheck(List<Vector2> directions, Tile[,] tiles, Vector2 position)
     {
-        return true;
+        for(int i = 0; i < directions.Count; i++)
+        {
+            bool outOfBounds = false;
+            int multiplier = 1;
+            while (!outOfBounds)
+            {
+                Vector2 temp = position + (directions[i] * multiplier);
+                if(temp.x >= 0 && temp.x < tiles.GetLength(0) && temp.y >= 0 && temp.y < tiles.GetLength(1))
+                {
+                    if (tiles[(int)temp.x, (int)temp.y].pieceAttached != null)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        multiplier++;
+                    }
+                }
+                else
+                {
+                    outOfBounds = true;
+                }
+            }
+        }
+        return false;
     }
+
+    private Tile[,] PlacePieceOnBoard(Tile[,] tiles, ChessPieceClass piece, Vector2 position)
+    {
+        Tile[,] tempArray = tiles;
+        switch (piece.pieceName)
+        {
+            case "King":
+                tempArray = SetMovementPiecePlacement(piece.moveDir, tempArray, position);
+                break;
+            case "Queen":
+                tempArray = DirectionalPiecePlacement(piece.moveDir, tempArray, position);
+                break;
+            case "Bishop":
+                tempArray = DirectionalPiecePlacement(piece.moveDir, tempArray, position);
+                break;
+            case "Rook":
+                tempArray = DirectionalPiecePlacement(piece.moveDir, tempArray, position);
+                break;
+            case "Knight":
+                tempArray = SetMovementPiecePlacement(piece.moveDir, tempArray, position);
+                break;
+        }
+        return tempArray;
+    }
+
+    private Tile[,] SetMovementPiecePlacement(List<Vector2> directions, Tile[,] tiles, Vector2 position)
+    {
+        Tile[,] tempTiles = tiles;
+        for (int i = 0; i < directions.Count; i++)
+        {
+            Vector2 temp = position + directions[i];
+            if (temp.x >= 0 && temp.x < tiles.GetLength(0) && temp.y >= 0 && temp.y < tiles.GetLength(1))
+            {
+                tempTiles[(int)temp.x, (int)temp.y].placeble = false;
+            }
+        }
+        return tempTiles;
+    }
+
+    private Tile[,] DirectionalPiecePlacement(List<Vector2> directions, Tile[,] tiles, Vector2 position)
+    {
+        Tile[,] tempTiles = tiles;
+        for (int i = 0; i < directions.Count; i++)
+        {
+            bool outOfBounds = false;
+            int multiplier = 1;
+            while (!outOfBounds)
+            {
+                Vector2 temp = position + (directions[i] * multiplier);
+                if (temp.x >= 0 && temp.x < tempTiles.GetLength(0) && temp.y >= 0 && temp.y < tempTiles.GetLength(1))
+                {
+                    tempTiles[(int)temp.x, (int)temp.y].placeble = false;
+                    multiplier++;
+                }
+                else
+                {
+                    outOfBounds = true;
+                }
+            }
+        }
+        return tempTiles;
+    }
+
     private static Tile[,] BuildBoard(int x, int y)
     {
         Tile[,] board = new Tile[x, y];

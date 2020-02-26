@@ -14,19 +14,24 @@ public class ChessPieceClass
             case "King":
                 BuildDiagonal();
                 BuildStraights();
+                pieceName = "King";
                 break;
             case "Queen":
                 BuildDiagonal();
                 BuildStraights();
+                pieceName = "Queen";
                 break;
             case "Bishop":
                 BuildDiagonal();
+                pieceName = "Bishop";
                 break;
             case "Rook":
                 BuildStraights();
+                pieceName = "Rook";
                 break;
             case "Knight":
                 BuildKnight();
+                pieceName = "Knight";
                 break;
         }
     }

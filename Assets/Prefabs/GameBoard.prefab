@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1518029703163030295
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1518029703163030294}
+  - component: {fileID: 418312768437645667}
+  m_Layer: 0
+  m_Name: GameBoard
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1518029703163030294
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518029703163030295}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &418312768437645667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518029703163030295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a6c63843d8a4c64c9599382ec3f535c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tile: {fileID: 5271477204367950419, guid: ff2286fae41f67245a49eddf081f943f, type: 3}
+  KingTile: {fileID: 7627219930596274105, guid: de6ac5c4d0666f84d8ad8581ef10eaf8,
+    type: 3}
+  QueenTile: {fileID: 3965881781158745370, guid: 68a3a420d6b33d942b45205444a2ecd0,
+    type: 3}
+  BishopTile: {fileID: 563755781409126047, guid: 5f21d5bf1b2080c4e92255874c2278f3,
+    type: 3}
+  RookTile: {fileID: 3102809979177801913, guid: b4731a8e1379feb4cb57b18c45cad2fe,
+    type: 3}
+  KnightTile: {fileID: 3932908053434078778, guid: 894dcc0ac31689643a6b699eede6a89e,
+    type: 3}

@@ -8,6 +8,7 @@ public class UIController : MonoBehaviour
     public GameObject inputField;
     public Text uiText;
     public Text titleText;
+    public GameObject board;
     int numberOfInputs;
     GameSolver solver = new GameSolver();
     string[] titleStrings =  new string[7];
@@ -23,12 +24,6 @@ public class UIController : MonoBehaviour
         titleStrings[6] = "Num of Knight?";
         titleText.text = titleStrings[0];
         numberOfInputs = 0;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void GetTextInput()
@@ -67,6 +62,15 @@ public class UIController : MonoBehaviour
             inputField.SetActive(false);
             solver.Solve();
         }
-        
+        DisplaySolutions();
+    }
+
+    void DisplaySolutions()
+    {
+        for(int i = 0; i < solver.solutions.Count; i++)
+        {
+            GameObject tempBoard = Instantiate(board);
+            tempBoard.GetComponent<GameBoardDisplay>().CreateGameBoard(new Vector3(4,-2,0), solver.solutions[i], 1 + i, solver.solutions.Count);
+        }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameSolver
 {
     List<ChessPieceClass> pieces = new List<ChessPieceClass>();
-    List<Tile[,]> solutions = new List<Tile[,]>();
+    public List<Tile[,]> solutions = new List<Tile[,]>();
 
     public int arraySizeX;
     public int arraySizeY;
@@ -15,6 +15,8 @@ public class GameSolver
     public int numRook = 0;
     public int numKnight = 0;
 
+    //Debug Value
+    int callStack = 0;
     public void Solve()
     {
         Tile[,] board = BuildBoard(arraySizeX, arraySizeY);
@@ -50,25 +52,27 @@ public class GameSolver
 
     private void CycleArray(Tile[,] array, int piecesIndex)
     {
-        Tile[,] tempArray = array;
+        Tile[,] tempArray = (Tile[,])array.Clone();
+        int arrayIndex = piecesIndex;
         for (int i = 0; i < tempArray.GetLength(0); i++)
         {
             for(int j = 0; j< tempArray.GetLength(1); j++)
             {
-                if (tempArray[i, j].placeble && !CheckForKills(tempArray,pieces[piecesIndex],new Vector2(i,j)))
+                if (tempArray[i, j].placeble && !CheckForKills(tempArray,pieces[arrayIndex],new Vector2(i,j)))
                 {
                     tempArray[i, j].placeble = false;
-                    tempArray[i, j].pieceAttached = pieces[piecesIndex];
+                    tempArray[i, j].pieceAttached = pieces[arrayIndex];
                     
-                    if(piecesIndex + 1 < pieces.Count)
+                    if(arrayIndex + 1 < pieces.Count)
                     {
-                        tempArray = PlacePieceOnBoard(tempArray, pieces[piecesIndex], new Vector2(i, j));
-                        CycleArray(tempArray, piecesIndex++);
+                        CycleArray(PlacePieceOnBoard(tempArray, pieces[arrayIndex], new Vector2(i, j)), arrayIndex + 1);
                     }
                     else
                     {
-                        solutions.Add(tempArray);
+                        Tile[,] addArray = (Tile[,])tempArray.Clone();
+                        solutions.Add(addArray);
                     }
+
                     tempArray[i, j].placeble = true;
                     tempArray[i, j].pieceAttached = null;
                 }
@@ -137,7 +141,7 @@ public class GameSolver
 
     private Tile[,] PlacePieceOnBoard(Tile[,] tiles, ChessPieceClass piece, Vector2 position)
     {
-        Tile[,] tempArray = tiles;
+        Tile[,] tempArray = (Tile[,])tiles.Clone();
         if(piece.pieceName == "King"||piece.pieceName == "Knight")
         {
             tempArray = SetMovementPiecePlacement(piece.moveDir, tempArray, position);
@@ -151,11 +155,11 @@ public class GameSolver
 
     private Tile[,] SetMovementPiecePlacement(List<Vector2> directions, Tile[,] tiles, Vector2 position)
     {
-        Tile[,] tempTiles = tiles;
+        Tile[,] tempTiles = (Tile[,])tiles.Clone(); 
         for (int i = 0; i < directions.Count; i++)
         {
             Vector2 temp = position + directions[i];
-            if (temp.x >= 0 && temp.x < tiles.GetLength(0) && temp.y >= 0 && temp.y < tiles.GetLength(1))
+            if (temp.x >= 0 && temp.x < tempTiles.GetLength(0) && temp.y >= 0 && temp.y < tempTiles.GetLength(1))
             {
                 tempTiles[(int)temp.x, (int)temp.y].placeble = false;
             }
@@ -165,7 +169,7 @@ public class GameSolver
 
     private Tile[,] DirectionalPiecePlacement(List<Vector2> directions, Tile[,] tiles, Vector2 position)
     {
-        Tile[,] tempTiles = tiles;
+        Tile[,] tempTiles = (Tile[,])tiles.Clone();
         for (int i = 0; i < directions.Count; i++)
         {
             bool outOfBounds = false;

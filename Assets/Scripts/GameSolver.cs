@@ -96,13 +96,13 @@ public class GameSolver
         }
     }
 
-    private void CycleArray(Tile[,] array, int piecesIndex)
+    private void CycleArray(Tile[,] array, byte piecesIndex)
     {
         Tile[,] tempArray = (Tile[,])array.Clone();
-        int arrayIndex = piecesIndex;
-        for (int i = 0; i < tempArray.GetLength(0); i++)
+        byte arrayIndex = piecesIndex;
+        for (byte i = 0; i < tempArray.GetLength(0); i++)
         {
-            for(int j = 0; j< tempArray.GetLength(1); j++)
+            for(byte j = 0; j< tempArray.GetLength(1); j++)
             {
                 if (tempArray[i, j].placeble && !CheckForKills(tempArray,pieces[arrayIndex],new Vector2(i,j)))
                 {
@@ -111,7 +111,7 @@ public class GameSolver
                     
                     if(arrayIndex + 1 < pieces.Count)
                     {
-                        CycleArray(PlacePieceOnBoard(tempArray, pieces[arrayIndex], new Vector2(i, j)), arrayIndex + 1);
+                        CycleArray(PlacePieceOnBoard(tempArray, pieces[arrayIndex], new Vector2(i, j)), (byte)(arrayIndex + 1));
                     }
                     else
                     {
@@ -142,7 +142,7 @@ public class GameSolver
 
     private bool SetMovementAmountKillCheck(List<Vector2> directions, Tile[,] tiles, Vector2 position)
     {
-        for(int i = 0; i < directions.Count; i++)
+        for(byte i = 0; i < directions.Count; i++)
         {
             Vector2 temp = position + directions[i];
             if (temp.x >= 0 && temp.x < tiles.GetLength(0) && temp.y >= 0 && temp.y < tiles.GetLength(1))
@@ -158,7 +158,7 @@ public class GameSolver
 
     private bool DirectionalKillCheck(List<Vector2> directions, Tile[,] tiles, Vector2 position)
     {
-        for(int i = 0; i < directions.Count; i++)
+        for(byte i = 0; i < directions.Count; i++)
         {
             bool outOfBounds = false;
             int multiplier = 1;
@@ -202,7 +202,7 @@ public class GameSolver
     private Tile[,] SetMovementPiecePlacement(List<Vector2> directions, Tile[,] tiles, Vector2 position)
     {
         Tile[,] tempTiles = (Tile[,])tiles.Clone(); 
-        for (int i = 0; i < directions.Count; i++)
+        for (byte i = 0; i < directions.Count; i++)
         {
             Vector2 temp = position + directions[i];
             if (temp.x >= 0 && temp.x < tempTiles.GetLength(0) && temp.y >= 0 && temp.y < tempTiles.GetLength(1))
@@ -216,7 +216,7 @@ public class GameSolver
     private Tile[,] DirectionalPiecePlacement(List<Vector2> directions, Tile[,] tiles, Vector2 position)
     {
         Tile[,] tempTiles = (Tile[,])tiles.Clone();
-        for (int i = 0; i < directions.Count; i++)
+        for (byte i = 0; i < directions.Count; i++)
         {
             bool outOfBounds = false;
             int multiplier = 1;

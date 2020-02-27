@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameSolver
 {
     List<ChessPieceClass> pieces = new List<ChessPieceClass>();
-    public List<Tile[,]> solutions = new List<Tile[,]>();
+    List<Tile[,]> possibilities = new List<Tile[,]>();
 
+    public List<Tile[,]> solutions = new List<Tile[,]>();
     public int arraySizeX;
     public int arraySizeY;
     public int numKing = 0;
@@ -15,16 +17,61 @@ public class GameSolver
     public int numRook = 0;
     public int numKnight = 0;
 
-    //Debug Value
-    int callStack = 0;
     public void Solve()
     {
         Tile[,] board = BuildBoard(arraySizeX, arraySizeY);
         CreateChessPieces();
         CycleArray(board, 0);
-        Debug.Log(solutions.Count);
+        RemoveDuplicates();
+        Debug.Log(solutions.Count);  
     }
 
+    private void RemoveDuplicates()
+    {
+        for(int i = 0; i < possibilities.Count; i++)
+        {
+            bool duplicate = false;
+            for(int j = 0; j < i; j++)
+            {
+                if (CompareTwoArrays(possibilities[j],possibilities[i]))
+                {
+                    duplicate = true;
+                    break;
+                }
+            }
+            if (!duplicate)
+            {
+                solutions.Add(possibilities[i]);
+            }
+        }
+    }
+
+    private bool CompareTwoArrays(Tile[,] firstArray,Tile[,] secondArray)
+    {
+        for(int i = 0; i < firstArray.GetLength(0); i++)
+        {
+            for (int j = 0; j < firstArray.GetLength(1); j++)
+            {
+                if(firstArray[i,j].pieceAttached == null && secondArray[i, j].pieceAttached != null)
+                {
+                    return false;
+                }
+                if (firstArray[i, j].pieceAttached != null && secondArray[i, j].pieceAttached == null)
+                {
+                    return false;
+                }
+                if (firstArray[i, j].pieceAttached == null && secondArray[i, j].pieceAttached == null)
+                {
+                    break;
+                }
+                else if(firstArray[i, j].pieceAttached.pieceName != secondArray[i, j].pieceAttached.pieceName)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
     private void CreateChessPieces()
     {
         int counter = 0;
@@ -70,7 +117,7 @@ public class GameSolver
                     else
                     {
                         Tile[,] addArray = (Tile[,])tempArray.Clone();
-                        solutions.Add(addArray);
+                        possibilities.Add(addArray);
                     }
 
                     tempArray[i, j].placeble = true;

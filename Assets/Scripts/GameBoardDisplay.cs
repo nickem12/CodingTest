@@ -12,17 +12,15 @@ public class GameBoardDisplay : MonoBehaviour
     public GameObject KnightTile;
     Vector3 newStartPosition;
     Vector3 resetPosition;
-    float speed;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    float speed = 5;
 
-    // Update is called once per frame
     void Update()
     {
-        
+        transform.Translate(Vector3.right * speed * Time.deltaTime);
+        if (transform.position.x >= resetPosition.x)
+        {
+            transform.position = newStartPosition;
+        }
     }
 
     public void CreateGameBoard(Vector3 position,Tile[,] boardData, int boardNumber, int numberOfBoards)
@@ -63,16 +61,16 @@ public class GameBoardDisplay : MonoBehaviour
             }
         }
 
-        if (boardNumber > 1)
+        if (boardNumber > 0)
         {
-            transform.position = new Vector3(position.x * (boardData.GetLength(0) * boardNumber), position.y, position.z);
+            transform.position = new Vector3(position.x * -(boardData.GetLength(0) * boardNumber), position.y, position.z);
         }
         else
         {
             transform.position = position;
         }
 
-        resetPosition = new Vector3(10 + (boardData.GetLength(0) * 1.25f), transform.position.y, transform.position.z);
-        newStartPosition = new Vector3(-10 - (boardData.GetLength(0) * 1.25f * numberOfBoards), transform.position.y, transform.position.z);
+        resetPosition = new Vector3(15 + (boardData.GetLength(0) * 1.25f * numberOfBoards), transform.position.y, transform.position.z);
+        newStartPosition = new Vector3(-15 - (boardData.GetLength(0) * 1.25f * numberOfBoards), transform.position.y, transform.position.z);
     }
 }

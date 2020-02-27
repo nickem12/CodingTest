@@ -70,7 +70,7 @@ public class UIController : MonoBehaviour
         for(int i = 0; i < solver.solutions.Count; i++)
         {
             GameObject tempBoard = Instantiate(board);
-            tempBoard.GetComponent<GameBoardDisplay>().CreateGameBoard(new Vector3(4,-2,0), solver.solutions[i], 1 + i, solver.solutions.Count);
+            tempBoard.GetComponent<GameBoardDisplay>().CreateGameBoard(new Vector3(4,-2,0), solver.solutions[i], i, solver.solutions.Count);
         }
     }
 }

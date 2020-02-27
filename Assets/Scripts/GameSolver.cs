@@ -22,8 +22,7 @@ public class GameSolver
         Tile[,] board = BuildBoard(arraySizeX, arraySizeY);
         CreateChessPieces();
         CycleArray(board, 0);
-        RemoveDuplicates();
-        Debug.Log(solutions.Count);  
+        RemoveDuplicates();  
     }
 
     private void RemoveDuplicates()

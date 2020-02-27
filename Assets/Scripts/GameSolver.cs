@@ -2,42 +2,50 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameSolver : MonoBehaviour
+public class GameSolver
 {
     List<ChessPieceClass> pieces = new List<ChessPieceClass>();
     List<Tile[,]> solutions = new List<Tile[,]>();
-    // Start is called before the first frame update
-    void Start()
+
+    public int arraySizeX;
+    public int arraySizeY;
+    public int numKing = 0;
+    public int numQueen = 0;
+    public int numBishop = 0;
+    public int numRook = 0;
+    public int numKnight = 0;
+
+    public void Solve()
     {
-        Solve();
+        Tile[,] board = BuildBoard(arraySizeX, arraySizeY);
+        CreateChessPieces();
+        CycleArray(board, 0);
+        Debug.Log(solutions.Count);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void CreateChessPieces()
     {
-        
-    }
-
-    void Solve()
-    {
-        Debug.Log("The program will start calculating with a 3 x 3 grid with 2 Kings and 1 Rook?");
-        int arrayX = 3;
-        int arrayY = 3;
-        Tile[,] board = BuildBoard(arrayX, arrayY);
-        Debug.Log(board.GetLength(0) + " " + board.GetLength(1));
-        int numKing = 2;
-        int numRook = 1;
-        for (int kingCounter = 0; kingCounter < numKing; kingCounter++)
+        int counter = 0;
+        for (counter = 0; counter < numKing; counter++)
         {
             pieces.Add(new ChessPieceClass("King"));
         }
-        for (int rookCounter = 0; rookCounter < numRook; rookCounter++)
+        for (counter = 0; counter < numQueen; counter++)
+        {
+            pieces.Add(new ChessPieceClass("Queen"));
+        }
+        for (counter = 0; counter < numBishop; counter++)
+        {
+            pieces.Add(new ChessPieceClass("Bishop"));
+        }
+        for (counter = 0; counter < numRook; counter++)
         {
             pieces.Add(new ChessPieceClass("Rook"));
         }
-        Debug.Log(pieces.Count);
-        CycleArray(board, 0);
-        Debug.Log(solutions.Count);
+        for (counter = 0; counter < numKnight; counter++)
+        {
+            pieces.Add(new ChessPieceClass("Knight"));
+        }
     }
 
     private void CycleArray(Tile[,] array, int piecesIndex)
@@ -71,23 +79,13 @@ public class GameSolver : MonoBehaviour
     private bool CheckForKills(Tile[,] tiles, ChessPieceClass piece,Vector2 position)
     {
         bool canKill = false;
-        switch (piece.pieceName)
+        if(piece.pieceName == "King" || piece.pieceName == "Knight")
         {
-            case "King":
-                canKill = SetMovementAmountKillCheck(piece.moveDir,tiles, position);
-                break;
-            case "Queen":
-                canKill = DirectionalKillCheck(piece.moveDir, tiles, position);
-                break;
-            case "Bishop":
-                canKill = DirectionalKillCheck(piece.moveDir, tiles, position);
-                break;
-            case "Rook":
-                canKill = DirectionalKillCheck(piece.moveDir, tiles, position);
-                break;
-            case "Knight":
-                canKill = SetMovementAmountKillCheck(piece.moveDir, tiles, position);
-                break;
+            canKill = SetMovementAmountKillCheck(piece.moveDir, tiles, position);
+        }
+        else
+        {
+            canKill = DirectionalKillCheck(piece.moveDir, tiles, position);
         }
         return canKill;
     }
@@ -140,23 +138,13 @@ public class GameSolver : MonoBehaviour
     private Tile[,] PlacePieceOnBoard(Tile[,] tiles, ChessPieceClass piece, Vector2 position)
     {
         Tile[,] tempArray = tiles;
-        switch (piece.pieceName)
+        if(piece.pieceName == "King"||piece.pieceName == "Knight")
         {
-            case "King":
-                tempArray = SetMovementPiecePlacement(piece.moveDir, tempArray, position);
-                break;
-            case "Queen":
-                tempArray = DirectionalPiecePlacement(piece.moveDir, tempArray, position);
-                break;
-            case "Bishop":
-                tempArray = DirectionalPiecePlacement(piece.moveDir, tempArray, position);
-                break;
-            case "Rook":
-                tempArray = DirectionalPiecePlacement(piece.moveDir, tempArray, position);
-                break;
-            case "Knight":
-                tempArray = SetMovementPiecePlacement(piece.moveDir, tempArray, position);
-                break;
+            tempArray = SetMovementPiecePlacement(piece.moveDir, tempArray, position);
+        }
+        else
+        {
+            tempArray = DirectionalPiecePlacement(piece.moveDir, tempArray, position);
         }
         return tempArray;
     }
